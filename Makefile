@@ -1,6 +1,7 @@
 NAME = test
 
-SRC = src/*.c
+SRVR = src/server.c
+CLNT = src/client.c
 
 LIBFT = libft
 INC = includes
@@ -11,11 +12,12 @@ FLAGS = -Wall -Werror -Wextra $(LIBS) $(HEADERS)
 
 all:
 	make -s -C $(LIBFT)
-	gcc $(SRC) $(FLAGS) -o $(NAME)
+	gcc $(SRVR) $(FLAGS) -o server
+	gcc $(CLNT) $(FLAGS) -o client
 
 clean:
 	make fclean -s -C $(LIBFT)
-	rm -f $(NAME)
+	rm -f client server
 
 fclean: clean
 

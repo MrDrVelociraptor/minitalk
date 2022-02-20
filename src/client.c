@@ -13,28 +13,45 @@
 
 #include "minitalk.h"
 
-int main(void)
+static void    have_a_byte(char byte, int pid)
 {
-    int id = fork();
-    int n;
-    if (id == 0)
-    {
-        n = 1;
-    }
-    else
-    {
-        n = 6;
-    }
-    if (id != 0)
-        wait(0);
     int i;
-    for (i = n; i < n + 5; i++)
+
+    i = 7;
+    while (i >= 0)
     {
-        ft_printf("%d ", i);
-        //fflush(stdout);
+        if (byte >> i & 1)
+            kill(pid, SIGUSR1);
+        else
+            kill(pid, SIGUSR2);
+        usleep(234);
+        i--;
     }
-    if (id != 0)
-        //ft_printf("\n");
-        ft_printf("\nThe parent waited for the child to finish\n");
+}
+
+static void    the_sandwhich(char *str, int pid)
+{
+    int i;
+
+    i = 0;
+    while(str[i])
+    {
+        have_a_byte(str[i], pid);
+        i++;
+    }
+}
+
+int main(int argc, char *argv[])
+{
+    int     serv_pid;
+    char    *msg;
+
+    if (argc != 3)
+        ft_printf("Client takes more args");
+    serv_pid = ft_atoi(argv[1]);
+    ft_printf("%d\n", serv_pid);
+    msg = argv[2];
+    ft_printf("%s\n", msg);
+    the_sandwhich(msg, serv_pid);
     return (0);
 }
