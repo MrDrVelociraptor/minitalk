@@ -20,36 +20,34 @@ static void    print_pid(void)
 
 }
 
-static void    handle(int sig)
+static void handle(int sig)
 {
-    static char bits;
-    static int  count;
-    int         pid;
+    static unsigned char    byte;
+    static int              shift;
 
-    bits = 0;
-    count = 0;
-    pid = getpid();
+    shift <<= 1;
+    shift += 1;
+    byte <<= 1;
     if (sig == SIGUSR1)
-        bits |= (1 << count);
-    count++;
-    if (count == 8)
     {
-        ft_printf("%c", bits);
-        if (!bits)
-            kill(pid, SIGUSR1);
-        bits = 0;
-        count = 0;
+        signal(SIGUSR1, handle);
+        byte++;
     }
-}
+    else if (sig == SIGUSR2)
+        signal(SIGUSR2, handle);
+    if (shift == 8)
+    {
+        write(1, &byte, 1);
+        byte = 0;
+        shift = 0;
+    }
+} 
 
 int main(void)
 {
     print_pid();
-    while (1)
-    {
-        signal(SIGUSR1, handle);
-        signal(SIGUSR2, handle);
+    signal(SIGUSR1, handle);
+    signal(SIGUSR2, handle);
+    while (1)    
         pause();
-    }
-    return (0);
 }

@@ -13,45 +13,44 @@
 
 #include "minitalk.h"
 
-static void    have_a_byte(char byte, int pid)
+static void    bit_sender(pid_t pid, char c)
 {
-    int i;
+    int     i = 0;
 
-    i = 7;
     while (i >= 0)
     {
-        if (byte >> i & 1)
-            kill(pid, SIGUSR1);
+        if (c >> i & 1)
+        {
+            if (kill(pid, SIGUSR1) == -1)
+                ft_printf("Negative on the SIGUSR1\n");
+        }
         else
-            kill(pid, SIGUSR2);
-        usleep(234);
+        {
+            if (kill(pid, SIGUSR2) == -1)
+                ft_printf("Negative on the SIGUSR2\n");
+        }
         i--;
+        usleep(234); 
     }
 }
 
-static void    the_sandwhich(char *str, int pid)
+static void    sig_handle(int pid, char *msg)
 {
-    int i;
+    int i = 0;
 
-    i = 0;
-    while(str[i])
+    while (msg[i] != '\0')
     {
-        have_a_byte(str[i], pid);
+        bit_sender(pid, msg[i]);
         i++;
     }
+    bit_sender(pid, msg[i]);
+    msg[strlen(msg) + 1] = '\0';
 }
 
 int main(int argc, char *argv[])
 {
-    int     serv_pid;
-    char    *msg;
-
     if (argc != 3)
-        ft_printf("Client takes more args");
-    serv_pid = ft_atoi(argv[1]);
-    ft_printf("%d\n", serv_pid);
-    msg = argv[2];
-    ft_printf("%s\n", msg);
-    the_sandwhich(msg, serv_pid);
-    return (0);
+        ft_printf("<PID> [message]");
+    sig_handle(ft_atoi(argv[1]), argv[2]);
+    return (1);
 }
