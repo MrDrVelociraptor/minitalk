@@ -15,12 +15,13 @@
 
 static void    bit_send(int pid, char c)
 {
-    int byte;
+    int shift;
 
-    byte = 7;
-    while (byte >= 0)
+    shift = 1 << 6;
+    ft_printf("1");
+    while (shift != 0)
     {
-        if ((c >> byte) & 1)
+        if (c & shift)
         {
             if (kill(pid, SIGUSR1) == -1)
                 ft_printf("SIGUSR1 fail\n");
@@ -30,7 +31,7 @@ static void    bit_send(int pid, char c)
             if (kill(pid, SIGUSR2) == -1)
                 ft_printf("SIGUSR2 fail\n");
         }
-        byte--;
+        shift >>= 1;
         usleep(200);
     }
 }
@@ -39,15 +40,17 @@ int main(int ac, char *arg[])
 {
     int pid;
     int i;
-
+    if (ac != 3)
+    {
+        printf("Correct input ./client <server-pid> <message>\n");
+        return (1);
+    }
     pid = ft_atoi(arg[1]);
     i = 0;
-    if (ac != 3)
-        printf("Correct input ./client <server-pid> <message>\n");
     while (arg[2][i] != '\0')
     {
         bit_send(pid, arg[2][i]);
         i++;
     }
-    return (1);
+    return (0);
 }
