@@ -13,44 +13,41 @@
 
 #include "minitalk.h"
 
-static void    bit_sender(pid_t pid, char c)
+static void    bit_send(int pid, char c)
 {
-    int     i = 0;
+    int byte;
 
-    while (i >= 0)
+    byte = 7;
+    while (byte >= 0)
     {
-        if (c >> i & 1)
+        if ((c >> byte) & 1)
         {
             if (kill(pid, SIGUSR1) == -1)
-                ft_printf("Negative on the SIGUSR1\n");
+                ft_printf("SIGUSR1 fail\n");
         }
         else
         {
             if (kill(pid, SIGUSR2) == -1)
-                ft_printf("Negative on the SIGUSR2\n");
+                ft_printf("SIGUSR2 fail\n");
         }
-        i--;
-        usleep(234); 
+        byte--;
+        usleep(200);
     }
 }
 
-static void    sig_handle(int pid, char *msg)
+int main(int ac, char *arg[])
 {
-    int i = 0;
+    int pid;
+    int i;
 
-    while (msg[i] != '\0')
+    pid = ft_atoi(arg[1]);
+    i = 0;
+    if (ac != 3)
+        printf("Correct input ./client <server-pid> <message>\n");
+    while (arg[2][i] != '\0')
     {
-        bit_sender(pid, msg[i]);
+        bit_send(pid, arg[2][i]);
         i++;
     }
-    bit_sender(pid, msg[i]);
-    msg[strlen(msg) + 1] = '\0';
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc != 3)
-        ft_printf("<PID> [message]");
-    sig_handle(ft_atoi(argv[1]), argv[2]);
     return (1);
 }

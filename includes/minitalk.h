@@ -18,6 +18,7 @@
 #include "../libft/libft.h"
 #include <stdlib.h>
 #include <time.h>
+#include <sys/types.h>
 
 
 #endif

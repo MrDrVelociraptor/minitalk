@@ -25,19 +25,16 @@ static void handle(int sig)
     static unsigned char    byte;
     static int              shift;
 
-    shift <<= 1;
-    shift += 1;
-    byte <<= 1;
+    byte = 0;
+    shift = 0;
     if (sig == SIGUSR1)
-    {
-        signal(SIGUSR1, handle);
-        byte++;
-    }
-    else if (sig == SIGUSR2)
-        signal(SIGUSR2, handle);
+        byte |= (1 << shift);
+    shift++;   
     if (shift == 8)
     {
-        write(1, &byte, 1);
+        ft_printf("%c", byte);
+        if (!byte)
+            kill(getpid(), SIGUSR1);
         byte = 0;
         shift = 0;
     }
@@ -48,6 +45,6 @@ int main(void)
     print_pid();
     signal(SIGUSR1, handle);
     signal(SIGUSR2, handle);
-    while (1)    
+    while (1)
         pause();
 }
