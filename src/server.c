@@ -6,48 +6,46 @@
 /*   By: nspeedy <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/20 11:35:49 by nspeedy           #+#    #+#             */
-/*   Updated: 2022/02/20 11:35:51 by nspeedy          ###   ########.fr       */
+/*   Updated: 2022/02/23 13:46:50 by nspeedy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
-static void    print_pid(void)
+static void	print_pid(void)
 {
-    ft_printf("Server pid is: %d\n", getpid());
-    ft_printf("Open client terminal\n");
-    ft_printf("Run the client with ./client <PID> message\n");
-
+	ft_printf("Server pid is: %d\n", getpid());
+	ft_printf("Open client terminal\n");
+	ft_printf("Run the client with ./client <PID> message\n");
 }
 
-static void handle(int sig)
+static void	handle(int sig)
 {
-    static unsigned char    byte;
-    static int              shift;
+	static unsigned char	byte;
+	static int				shift;
 
-    byte <<= 1;
-    shift++;
-    if (sig == SIGUSR1)
-    {
-        signal(SIGUSR1, handle);
-        byte++;
-    }
-    else if (sig == SIGUSR2)
-        signal(SIGUSR2, handle);
-    if (shift == 7)
-    {
-        write(1, &byte, 1);
-        byte = 0;
-        shift = 0;
-    }
-} 
+	byte <<= 1;
+	shift++;
+	if (sig == SIGUSR1)
+	{
+		signal(SIGUSR1, handle);
+		byte++;
+	}
+	else if (sig == SIGUSR2)
+		signal(SIGUSR2, handle);
+	if (shift == 7)
+	{
+		write(1, &byte, 1);
+		byte = 0;
+		shift = 0;
+	}
+}
 
-int main(void)
+int	main(void)
 {
-    print_pid();
-
-    signal(SIGUSR1, handle);
-    signal(SIGUSR2, handle);
-    while (1)
-        pause();
+	print_pid();
+	signal(SIGUSR1, handle);
+	signal(SIGUSR2, handle);
+	while (1)
+		pause();
 }
