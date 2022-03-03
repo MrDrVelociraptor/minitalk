@@ -1,5 +1,3 @@
-NAME = test
-
 SRVR = src/server.c
 CLNT = src/client.c
 
@@ -11,13 +9,19 @@ HEADERS = -I$(INC) -I$(LIBFT)
 FLAGS = -Wall -Werror -Wextra $(LIBS) $(HEADERS)
 
 all:
-	make -s -C $(LIBFT)
-	gcc $(SRVR) $(FLAGS) -o server
-	gcc $(CLNT) $(FLAGS) -o client
+	@make -s -C $(LIBFT)
+	@echo Compiling libft
+	@gcc $(SRVR) $(FLAGS) -o server
+	@echo Compiling server
+	@gcc $(CLNT) $(FLAGS) -o client
+	@echo Compiling client
+	@echo Good to go
+	
 
 clean:
-	make fclean -s -C $(LIBFT)
-	rm -f client server
+	@make fclean -s -C $(LIBFT)
+	@rm -f client server
+	@echo nothing here anymore, well, except .c
 
 fclean: clean
 

@@ -14,9 +14,10 @@
 
 static void	print_pid(void)
 {
+	ft_printf("Server operational\n");
 	ft_printf("Server pid is: %d\n", getpid());
-	ft_printf("Open client terminal\n");
-	ft_printf("Run the client with ./client <PID> message\n");
+	ft_printf("Open client in a different terminal\n");
+	ft_printf("Run the client with ./client <PID> <message>\n");
 }
 
 static void	handle(int sig)
@@ -33,7 +34,7 @@ static void	handle(int sig)
 	}
 	else if (sig == SIGUSR2)
 		signal(SIGUSR2, handle);
-	if (shift == 7)
+	if (shift == 8)
 	{
 		write(1, &byte, 1);
 		byte = 0;

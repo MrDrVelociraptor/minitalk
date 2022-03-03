@@ -6,7 +6,7 @@
 /*   By: nspeedy <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/10 12:13:59 by nspeedy           #+#    #+#             */
-/*   Updated: 2021/10/15 17:56:15 by nspeedy          ###   ########.fr       */
+/*   Updated: 2022/02/26 11:49:34 by nspeedy          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 size_t	ft_strlcpy(char *dest, const char *src, size_t size)
 {
-	size_t  track;
-	size_t  length;
+	size_t	track;
+	size_t	length;
 
 	track = 0;
 	while (src[track] != '\0')
