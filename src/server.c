@@ -34,7 +34,10 @@ static void	handle(int sig, siginfo_t *cl_pid, void *horse)
 	{
 		write(1, &byte, 1);
 		if (!byte)
+		{
 			kill(cl_pid->si_pid, SIGUSR1);
+			ft_putchar_fd('\n', 1);
+		}
 		byte = 0;
 		shift = 0;
 	}
